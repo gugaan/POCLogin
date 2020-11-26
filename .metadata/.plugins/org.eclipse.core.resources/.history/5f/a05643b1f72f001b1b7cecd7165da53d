@@ -1,0 +1,7 @@
+server:
+  port: 8290
+  
+eureka:  client:    register-with-eureka: false
+    fetchRegistry: false
+    service-url:
+      defaultZone: http://localhost:8290/eureka

@@ -1,0 +1,7 @@
+1604930646176	Rename type 'AccountEntity'
+1604930773905	Encapsulate field 'username'
+1604930778447	Encapsulate field 'userid'
+1604930802561	Encapsulate field 'userid'
+1604930910455	Delete element
+1604930953077	Rename type 'RequestData'
+1604931703672	Encapsulate field 'userid'

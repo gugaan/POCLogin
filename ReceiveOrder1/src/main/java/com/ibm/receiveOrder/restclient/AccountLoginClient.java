@@ -1,0 +1,12 @@
+package com.ibm.receiveOrder.restclient;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+@FeignClient(name="accountlogin")
+public interface AccountLoginClient {
+
+	@GetMapping("/login/createToken/{username}")
+	public String createToken(@PathVariable("username")String username);
+	}

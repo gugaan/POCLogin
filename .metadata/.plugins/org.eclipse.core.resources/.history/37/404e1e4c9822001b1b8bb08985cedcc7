@@ -1,0 +1,53 @@
+package com.ibm.accountlogin.service;
+
+import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.ibm.accountlogin.dto.UserDto;
+import com.ibm.accountlogin.entity.UserEntity;
+import com.ibm.accountlogin.mapper.AccountLoginMapper;
+import com.ibm.accountlogin.repository.AccountLoginRepository;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+@Service
+public class AccountLoginService {
+	
+	@Autowired
+	AccountLoginRepository accountLoginRepository;
+
+	public String createToken(UserDto userDto) {
+		String token="";
+		if(userDto != null) {
+		String signKey = Base64.getEncoder().encodeToString(userDto.getPassword().getBytes());
+		Calendar now = Calendar.getInstance();
+		Date issueTime = now.getTime();
+		now.add(Calendar.MINUTE, 30);
+		Date expiryTime = now.getTime();
+		token = Jwts.builder()
+				.setSubject(userDto.getUsername())
+				.setIssuedAt(issueTime)
+				.claim("username", userDto.getUsername())
+				.setIssuer("JWT_KEY").setExpiration(expiryTime)
+				.signWith(SignatureAlgorithm.HS256, signKey)
+				.compact();		
+		}
+		return token;
+
+	}
+	
+	public String saveUserDetails(UserDto userDto) {
+		UserEntity userEntity=new UserEntity();
+		AccountLoginMapper mapper =new AccountLoginMapper();
+		mapper.convertToEntity(userDto);
+		accountLoginRepository.save(userEntity);
+		return "Saved Successfully";
+		
+	}
+
+}
