@@ -8,8 +8,6 @@ spring:  datasource:    url: jdbc:h2:mem:accountLogin
   h2:    console:      enabled: true
       
   application:    name: accountlogin
-  zipkin:
-    base-url: http://localhost:9411/
     
 eureka:  instance:    instance-id: ${spring.application.name}:${random.int} 
    
