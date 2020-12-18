@@ -30,4 +30,9 @@ public class AccountLoginController {
 	public String saveUserDetails(@RequestBody UserDto userDto) {
 		return accountLoginService.saveUserDetails(userDto);
 	}
+	
+	@GetMapping("/validateUser/{username}")
+	public String validateUser(@PathVariable("username")String username) {		
+		return accountLoginService.validateUser(username);		
+	}
 }
