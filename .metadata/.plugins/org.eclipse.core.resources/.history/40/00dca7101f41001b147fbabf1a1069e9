@@ -42,7 +42,7 @@ public class ReceiveOrderService {
 			if (StringUtils.isNotEmpty(secret)) {
 				if (StringUtils.isNotEmpty(username)) {
 					if (!ObjectUtils.isEmpty(getExpirationDateFromClaim(token, secret))
-							&& getExpirationDateFromClaim(token, secret).after(new Date())) {
+							&& getExpirationDateFromClaim(token, secret).before(new Date())) {
 						for (Map.Entry<String, Long> e : receiveOrderDto.getOrderList().entrySet()) {
 							ReceiveOrderEntity receiveOrderEntity = new ReceiveOrderEntity();
 							receiveOrderEntity.setItem(e.getKey());

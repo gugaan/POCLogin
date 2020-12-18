@@ -38,19 +38,17 @@ public class ReceiveOrderService {
 			String[] jwtSplit = token.split("\\.");
 			JSONObject payload = new JSONObject(decode(jwtSplit[1]));
 			String secret = accountLoginClient.validateUser(payload.getString("username"));
-			String username=getUserNameFromClaim(token, secret);
 			if (StringUtils.isNotEmpty(secret)) {
-				if (StringUtils.isNotEmpty(username)) {
+				if (!ObjectUtils.isEmpty(getUserNameFromClaim(token, secret))) {
 					if (!ObjectUtils.isEmpty(getExpirationDateFromClaim(token, secret))
-							&& getExpirationDateFromClaim(token, secret).after(new Date())) {
+							&& getExpirationDateFromClaim(token, secret).before(new Date())) {
 						for (Map.Entry<String, Long> e : receiveOrderDto.getOrderList().entrySet()) {
 							ReceiveOrderEntity receiveOrderEntity = new ReceiveOrderEntity();
 							receiveOrderEntity.setItem(e.getKey());
 							receiveOrderEntity.setQuantity(e.getValue());
-							receiveOrderEntity.setUsername(username);
+							receiveOrderEntity.setUsername(getUserNameFromClaim(token, secret));
 							receiveOrderRepository.save(receiveOrderEntity);
 						}
-						msg = "Order received succesfully";
 					} else {
 						msg = "Token Expired";
 					}
@@ -59,7 +57,8 @@ public class ReceiveOrderService {
 				}
 			} else {
 				msg = "Invalid Token";
-			}			
+			}
+			msg = "Order received succesfully";
 		} else {
 			msg = "Invalid Token";
 		}
